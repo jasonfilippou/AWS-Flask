@@ -2,7 +2,7 @@
 
 ### Description
 
-A Flask app that allows a user to upload images and automatically generate meaningful labels. The app runs on an EC2 cluster and makes use of several AWS services to manage authentication & authorization, image recognition and label generation, queueing, distributed computation and storage of binary and relational data. Inspired by the edx.org course *AWS Fundamentals*.
+A Flask app that allows a user to upload images and automatically generate meaningful labels. The app runs on an EC2 cluster and makes use of the `boto3` library to leverage several AWS services, authentication & authorization, image recognition and label generation, queueing, distributed computation and storage of binary and relational data. Inspired by the edx.org course *AWS Fundamentals*.
 
 ### AWS services leveraged:
 
@@ -18,7 +18,7 @@ A Flask app that allows a user to upload images and automatically generate meani
 
 - `Deploy`: scripts to initialize the environment for the entire application. Since the application is run on an EC2 "free" allocation, we frequently terminate and restart EC2 and RDS services. The scripts in this directory allow a fresh EC2-hosted OS to download some necessary packets and initialize `nginx` appropriately.
 - `SetupScripts`: A Python function that sets up the RDS database needed to store image labels.
-- `FlaskApp`:  In many ways the "meat" of the project, especially `application.py`. The reader is encouraged to read through the comments of`application.py` for an explanation of the flow of a user request. Additional Python files exist, for storing sensitive information (e.g Cognito access keys / secrets) in environment variables, and for wrapping around SQL queries.
+- `FlaskApp`:  In many ways the "meat" of the project, especially `application.py`. The reader is encouraged to read through the comments of`application.py` for an explanation of the flow of a user request through the various routes that the app listens to. Additional Python files exist, for storing sensitive information (e.g Cognito access keys / secrets) in environment variables, and for wrapping around SQL queries.
 - `LambdaImageLabels`: Contains code that would otherwise be in `FlaskApp/application.py`, such that Amazon Lambda can use the Rekognition routines outside the EC2 server and asynchronously return the results to the user.
 - `SqsLongPoll`: implementation of a long polling function for receiving notifications of image uploads from S3. 
 
